@@ -417,9 +417,9 @@ int ExtentBasedTableBuilder::AddBlock(const Slice& block_contents,
   if (rep_->props.num_entries > 0 &&
       internal_comparator_.Compare(Slice(add_block_stats.first_key_),
                                    Slice(rep_->last_key)) <= 0) {
-    XENGINE_LOG(ERROR, "Order wrong in AddBlock", K(add_block_stats.first_key_), K(rep_->last_key));
+    XENGINE_LOG(ERROR, "Order wrong in AddBlock", "first_key", Slice(add_block_stats.first_key_), "last_key", Slice(rep_->last_key));
     // Abort in debug
-    assert(false);
+    abort();
     return Status::kCorruption;
   }
 
@@ -717,8 +717,8 @@ int ExtentBasedTableBuilder::plain_add(const Slice& key, const Slice& value) {
 
   if (rep_->props.num_entries > 0) {
     if (internal_comparator_.Compare(key, Slice(rep_->last_key)) <= 0) {
-      XENGINE_LOG(ERROR, "Order wrong in Add", K(rep_->last_key), K(key));
-      assert(false);
+      XENGINE_LOG(ERROR, "Order wrong in Add", "last_key", Slice(rep_->last_key), K(key));
+      abort();
       return Status::kCorruption;
     }
   }
